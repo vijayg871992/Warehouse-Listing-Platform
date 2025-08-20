@@ -48,12 +48,6 @@ coverage/
 temp/
 tmp/
 
-# Documentation assets
-*.html
-screenshots/
-*.png
-*.jpg
-
 # Backup files
 *.backup
 *.bak
