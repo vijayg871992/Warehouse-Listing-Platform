@@ -1,5 +1,4 @@
-# LogiSpace Network — Secure B2B Property Management
-
+# Warehouse Listing Platform
 A full-stack application for listing, managing, and approving warehouse properties. Built with React, Node.js, Express, and MySQL, featuring JWT/Google OAuth authentication, multi-image uploads, and admin approval workflows.
 
 **Live at**: [vijayg.dev/warehouse-listing](https://vijayg.dev/warehouse-listing)
