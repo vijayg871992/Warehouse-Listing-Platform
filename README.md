@@ -6,29 +6,9 @@ A full-stack application for listing, managing, and approving warehouse properti
 ## 🎯 Live Demo
 
 - 🌐 **Production URL**: [https://vijayg.dev/warehouse-listing](https://vijayg.dev/warehouse-listing)
-- 👤 **Demo Access**: Demo login available on request (seeded account with reset schedule)
 - 📱 **Features**: Property listing, search filters, admin approval, image uploads
 - 🔧 **API Endpoint**: `https://vijayg.dev/warehouse-listing/api`
 
-### Quick API Test
-```bash
-# Test health endpoint
-curl https://vijayg.dev/warehouse-listing/api/health
-
-# Get public warehouses
-curl https://vijayg.dev/warehouse-listing/api/warehouses/public
-```
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [API Documentation](#api-documentation)
-- [Database Schema](#database-schema)
-- [Security Implementation](#security-implementation)
-- [Installation & Setup](#installation--setup)
-- [Production Deployment](#production-deployment)
-- [Areas for Improvement](#areas-for-improvement)
 
 ## Overview
 
@@ -47,16 +27,16 @@ Warehouse Listing Platform is a comprehensive B2B solution for warehouse propert
 
 ### Technical Stack
 
-| Component | Technology | Version |
-|-----------|------------|---------|
-| Frontend | React | 18.3.1 |
-| Backend | Node.js + Express | Latest |
-| Database | MySQL + Sequelize | 8.0+ |
-| Authentication | Passport.js + JWT | Latest |
-| Styling | Tailwind CSS | 3.4.17 |
+| Component | Technology | 
+|-----------|------------|
+| Frontend | React |
+| Backend | Node.js + Express |
+| Database | MySQL + Sequelize | 
+| Authentication | Passport.js + JWT |
+| Styling | Tailwind CSS |
 | Build Tool | Vite | 6.0.5 |
-| Email Service | Nodemailer | 6.9.16 |
-| Process Management | PM2 | Latest |
+| Email Service | Nodemailer | 
+| Process Management | PM2 |
 
 ## Architecture
 
@@ -66,33 +46,33 @@ Warehouse Listing Platform is a comprehensive B2B solution for warehouse propert
 ┌─────────────────────────────────────────────────────────────────────┐
 │                      PRESENTATION LAYER                             │
 ├─────────────────────────────────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌───────────┐ │
-│  │  Listings   │  │   Search    │  │   Admin     │  │  Profile  │ │
-│  │    View     │  │   Filters   │  │  Dashboard  │  │   Page    │ │
-│  └─────────────┘  └─────────────┘  └─────────────┘  └───────────┘ │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌───────────┐   │
+│  │  Listings   │  │   Search    │  │   Admin     │  │  Profile  │   │
+│  │    View     │  │   Filters   │  │  Dashboard  │  │   Page    │   │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └───────────┘   │
 └─────────────────────────────────────────────────────────────────────┘
                                 │
-                         ┌──────┴──────┐
-                         │   Nginx     │
+                         ┌──────┴───────┐
+                         │   Nginx      │
                          │ Reverse Proxy│
-                         └──────┬──────┘
+                         └──────┬───────┘
                                 │
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         API LAYER                                   │
 ├─────────────────────────────────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌───────────┐ │
-│  │    Auth     │  │  Warehouse  │  │    Admin    │  │   Upload  │ │
-│  │ Controller  │  │ Controller  │  │ Controller  │  │  Service  │ │
-│  └─────────────┘  └─────────────┘  └─────────────┘  └───────────┘ │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌───────────┐   │
+│  │    Auth     │  │  Warehouse  │  │    Admin    │  │   Upload  │   │
+│  │ Controller  │  │ Controller  │  │ Controller  │  │  Service  │   │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └───────────┘   │
 └─────────────────────────────────────────────────────────────────────┘
                                 │
 ┌─────────────────────────────────────────────────────────────────────┐
 │                       DATABASE LAYER                                │
 ├─────────────────────────────────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌───────────┐ │
-│  │    Users    │  │ Warehouses  │  │   Images    │  │  Sessions │ │
-│  │    Table    │  │    Table    │  │    Table    │  │   Table   │ │
-│  └─────────────┘  └─────────────┘  └─────────────┘  └───────────┘ │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌───────────┐   │
+│  │    Users    │  │ Warehouses  │  │   Images    │  │  Sessions │   │
+│  │    Table    │  │    Table    │  │    Table    │  │   Table   │   │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └───────────┘   │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -172,53 +152,6 @@ Authorization: Bearer <admin-token>
 # Get pending reviews
 GET /api/admin/warehouses/pending
 Authorization: Bearer <admin-token>
-```
-
-## Database Schema
-
-### Users Table
-```sql
-CREATE TABLE users (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password VARCHAR(255),
-  isAdmin BOOLEAN DEFAULT FALSE,
-  googleId VARCHAR(255),
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-```
-
-### Warehouses Table
-```sql
-CREATE TABLE warehouses (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  userId INT NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  location VARCHAR(255) NOT NULL,
-  size BIGINT NOT NULL COMMENT 'Size in square feet',
-  price DECIMAL(10, 2) NOT NULL,
-  description TEXT,
-  isApproved BOOLEAN DEFAULT FALSE,
-  status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (userId) REFERENCES users(id)
-);
-```
-
-### Images Table
-```sql
-CREATE TABLE warehouse_images (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  warehouseId INT NOT NULL,
-  imageUrl VARCHAR(500) NOT NULL,
-  isPrimary BOOLEAN DEFAULT FALSE,
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (warehouseId) REFERENCES warehouses(id) ON DELETE CASCADE
-);
 ```
 
 ## Security Implementation
@@ -302,74 +235,6 @@ npm run dev
 cd frontend
 npm run dev
 ```
-
-## Production Deployment
-
-### PM2 Configuration
-```javascript
-module.exports = {
-  apps: [{
-    name: 'warehouse-listing',
-    script: 'server.js',
-    cwd: '/var/www/vijayg.dev/projects/Warehouse-Listing-Platform/backend',
-    env: {
-      NODE_ENV: 'production',
-      PORT: 8002
-    }
-  }]
-};
-```
-
-### Nginx Configuration
-```nginx
-# SPA routing fix
-location /warehouse-listing/ {
-    alias /var/www/vijayg.dev/projects/Warehouse-Listing-Platform/frontend-dist/;
-    try_files $uri $uri/ /index.html;
-}
-
-location /warehouse-listing/api {
-    proxy_pass http://127.0.0.1:8002;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-}
-```
-
-### Build Commands
-```bash
-# Frontend build with environment
-cd frontend
-VITE_API_URL=https://vijayg.dev/warehouse-listing/api npm run build
-
-# Copy to production directory (dist folder from Vite)
-cp -r dist/* ../frontend-dist/
-
-# Start backend with PM2
-pm2 start ecosystem.config.js
-pm2 save
-```
-
-## Areas for Improvement
-
-### Planned Enhancements
-- Advanced analytics dashboard
-- Real-time notifications with WebSockets  
-- Mobile application development
-- AI-powered property recommendations
-- Integration with mapping services (Google Maps/MapBox)
-- Multi-language support
-- Advanced reporting and export features
-
-### Technical Debt
-- Implement comprehensive test coverage
-- Add API documentation with Swagger
-- Optimize database queries with indexing
-- Implement caching with Redis
-- Add monitoring and logging aggregation
-- Enhance error handling and recovery
 
 ## 🤝 Contributing
 
